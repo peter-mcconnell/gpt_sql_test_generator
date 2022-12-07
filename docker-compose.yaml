@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  python:
+    image: python:3.6
+    volumes:
+      - ./scripts:/scripts
+      - ./requirements.txt:/requirements.txt
+      - ./run.sh:/run.sh
+    depends_on:
+      - postgres
+    entrypoint: ["/run.sh"]
+
+  postgres:
+    image: postgres:9.6
+    volumes:
+      - ./db.sql:/docker-entrypoint-initdb.d/db.sql
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - "5432:5432"
